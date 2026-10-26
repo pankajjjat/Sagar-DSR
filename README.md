@@ -3,6 +3,8 @@
 A mobile-friendly dashboard where field staff fill the Daily Field Report and export it as a PDF with the company logo.
 No server, no build step, no sign-in. It is plain HTML, CSS and JavaScript.
 
+**Live site:** <https://pankajjjat.github.io/Sagar-DSR/>
+
 ## Features
 - Dashboard with live totals: visits, productive calls, secondary and primary sales, collection
 - Dealer visits table: add or remove rows, discussion dropdown, "Productive" tick box
@@ -24,19 +26,15 @@ Open `index.html` in a browser, or serve the folder:
     python3 -m http.server 8000      # then open http://localhost:8000
 
 ## Publish on GitHub Pages
-1. Create a new repository on GitHub (for example `field-report`).
-2. In this folder run:
+This repository (`pankajjjat/Sagar-DSR`) deploys through GitHub Actions.
 
-       git init
-       git add .
-       git commit -m "Daily Field Report dashboard"
-       git branch -M main
-       git remote add origin https://github.com/<your-username>/field-report.git
-       git push -u origin main
+1. On GitHub open **Settings → Pages** and set **Source** to **GitHub Actions**.
+2. Push to `main` (or run **Actions → Deploy to GitHub Pages → Run workflow**).
+3. When the workflow finishes, the site is live at
+   <https://pankajjjat.github.io/Sagar-DSR/>.
 
-3. On GitHub open **Settings → Pages** and set **Source** to **GitHub Actions**.
-4. Open the **Actions** tab. When "Deploy to GitHub Pages" turns green, the site is live at
-   `https://<your-username>.github.io/field-report/`.
+The workflow uploads only the site files (`index.html`, `css/`, `js/`, `vendor/`, `assets/`,
+`manifest.json`, `sw.js`), not the repository docs.
 
 Every later `git push` to `main` redeploys automatically. It also works on Netlify, Vercel or any static host.
 
