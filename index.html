@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#d0202a"><link rel="manifest" href="manifest.json"><link rel="icon" href="assets/icon-192.png"><link rel="apple-touch-icon" href="assets/icon-192.png">
+<title>Field Report Dashboard – Himalayan Adhesives</title>
+<link rel="stylesheet" href="css/style.css"></head><body>
+<div id="app">
+<nav><div class="logo"><img src="assets/logo.png" alt="Himalayan Adhesives"></div>
+<button class="bt on" data-t="report">Today</button><button class="bt" data-t="history">History</button><button class="bt" data-t="dealers">Dealers</button><button class="bt" data-t="profile">Profile</button></nav>
+<main>
+<section id="t-report">
+<h1>Daily Field Report</h1>
+<div class="kpis">
+<div class="k"><small>Visits</small><b class="v-visits">0</b></div>
+<div class="k"><small>Productive</small><b class="v-prod">0</b></div>
+<div class="k"><small>Secondary (L)</small><b class="v-ss">0</b></div>
+<div class="k"><small>Primary (L)</small><b class="v-ps">0</b></div>
+<div class="k"><small>Collection (L)</small><b class="v-col">0</b></div></div>
+<div id="errs" class="errs hide"></div>
+<div class="card"><h2>Basic information</h2><div class="grid">
+<label>Date<input type="date" id="date"></label><label>Employee name<input id="emp"></label>
+<label>Designation<input id="des"></label><label>Region / Territory<input id="reg"></label>
+<label>Reporting manager<input id="mgr"></label></div></div>
+<div class="card"><h2>Dealer / distributor visits</h2>
+<div class="tw"><table><thead><tr><th>#</th><th>Dealer / Distributor</th><th>Address</th><th>Phone</th><th>Discussion</th><th>Productive</th><th>Secondary (L)</th><th>Primary (L)</th><th></th></tr></thead><tbody id="rows"></tbody></table></div>
+<div class="bar"><button class="btn o" id="addRow" type="button">+ Add row</button></div></div>
+<div class="card"><h2>Daily working details</h2><div class="grid">
+<div><label>Total visits (auto)</label><div class="auto v-visits">0</div></div>
+<div><label>Productive calls (auto)</label><div class="auto v-prod">0</div></div>
+<div><label>Non-productive calls (auto)</label><div class="auto v-np">0</div></div>
+<label>New dealer / outlet visited<input id="newvis" inputmode="numeric"></label>
+<label>New outlet added<input id="newadd"></label>
+<label>Market development activities<input id="mkt"></label></div></div>
+<div class="card"><h2>Sales / order update</h2><div class="grid">
+<div><label>Primary sales today, Lakhs (auto)</label><div class="auto v-ps">0</div></div>
+<div><label>Secondary sales today, Lakhs (auto)</label><div class="auto v-ss">0</div></div>
+<label>Project / Ready Mix order value (Lakhs)<input id="rm" type="number" step="any" min="0"></label>
+<label>Pending order follow-up<input id="pend"></label>
+<label>Key dealer / customer order confirmed<input id="key"></label></div></div>
+<div class="card"><h2>Collection update</h2><div class="grid">
+<label>Collection made today (Lakhs)<input id="col" type="number" step="any" min="0"></label>
+<label>Old overdue collected (Lakhs)<input id="old" type="number" step="any" min="0"></label>
+<label>Current outstanding follow-up done<input id="out"></label>
+<label>Top pending overdue dealers visited<input id="top"></label></div></div>
+<div class="card"><h2>Plan for next day</h2><div class="grid">
+<label>Planned dealer visits<input id="pv" inputmode="numeric"></label><label>Planned collections<input id="pc"></label>
+<label>Orders / conversions expected<input id="pe"></label><label>Specific focus area<input id="pf"></label></div>
+<div class="bar"><button class="btn" id="save" type="button">Save report</button><button class="btn" id="pdf" type="button">Download PDF</button><button class="btn o" id="print" type="button">Print / Save as PDF</button><button class="btn o" id="new" type="button">New report</button></div>
+<p style="color:var(--mute);font-size:13px">Download PDF saves a file with your logo. If the download is blocked, use Print / Save as PDF and pick “Save as PDF”.</p></div>
+</section>
+<section id="t-history" class="hide"><h1>History</h1><div class="card" id="hist"></div></section>
+<section id="t-dealers" class="hide"><h1>Dealers</h1><div class="card"><p style="color:var(--mute);margin-top:0">Dealers are saved from your reports and suggested when you type a name.</p><div id="dlist"></div></div></section>
+<section id="t-profile" class="hide"><h1>Profile</h1><div class="card"><div class="grid">
+<label>Employee name<input id="p-emp"></label><label>Designation<input id="p-des"></label>
+<label>Region / Territory<input id="p-reg"></label><label>Reporting manager<input id="p-mgr"></label>
+</div>
+<div class="bar"><button class="btn" id="psave" type="button">Save profile</button></div></div>
+<div class="card"><h2>Backup &amp; restore</h2><p style="margin-top:0;color:var(--mute);font-size:13px">Your data is stored only in this browser. Download a backup regularly, and restore it on a new phone or after clearing browser data.</p><div class="bar"><button class="btn o" id="bk" type="button">Download backup</button><label class="btn o" style="margin:0;display:inline-block;cursor:pointer">Restore backup<input type="file" id="rs" accept=".json,application/json" style="display:none"></label></div></div></section>
+</main></div>
+<datalist id="dl"></datalist><div id="toast"></div><div id="pr"></div>
+<script src="vendor/jspdf.umd.min.js"></script>
+<script src="vendor/jspdf.plugin.autotable.min.js"></script>
+<script src="js/logo.js"></script>
+<script src="js/app.js"></script></body></html>
