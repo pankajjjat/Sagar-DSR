@@ -5,6 +5,7 @@ function ld(k,d){try{var v=localStorage.getItem(K+k);return v?JSON.parse(v):d}ca
 function sv(k,v){try{localStorage.setItem(K+k,JSON.stringify(v))}catch(e){}}
 function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
 var num=function(x){return parseFloat(x)||0},fmt=function(n){return String(+n.toFixed(2))},nz=function(n){return n?fmt(n):"Nil"};
+var badAmt=function(v){var s=String(v==null?"":v).trim();if(!s)return false;var n=parseFloat(s);return !isFinite(n)||n<0};
 var DISC=["Adhesive","Tile grout","Ready mix","Waterproofing","Payment follow-up","Complaint / service","Other"];
 var F=["date","emp","des","reg","mgr","newvis","newadd","mkt","rm","pend","key","col","old","out","top","pv","pc","pe","pf"];
 var rows=$("rows"),C=["name","addr","phone","disc","sec","pri"];
@@ -31,14 +32,19 @@ function calc(){var t=tot(get());var m={visits:t.v,prod:t.p,np:t.np,ss:fmt(t.ss)
 function draft(){calc();sv("draft",get())}
 function blank(){var p=ld("profile",{});set({date:today(),emp:p.emp,des:p.des,reg:p.reg,mgr:p.mgr,rows:[]})}
 function check(r){var e=[];if(!r.date)e.push("Date is required.");if(!r.emp.trim())e.push("Employee name is required.");
- if(!r.reg.trim())e.push("Region / Territory is required.");if(!r.mgr.trim())e.push("Reporting manager is required.");
- var f=0;r.rows.forEach(function(x,i){var any=x.name.trim()||x.addr.trim()||x.phone.trim()||x.sec||x.pri;if(!any)return;
-  if(!x.name.trim())e.push("Row "+(i+1)+": dealer name is missing.");else{f++;if(!x.addr.trim())e.push("Row "+(i+1)+": address is missing.")}
-  if(x.phone.trim()&&!/^[+\d][\d\s-]{6,}$/.test(x.phone.trim()))e.push("Row "+(i+1)+": phone number looks invalid.")});
+  if(!r.reg.trim())e.push("Region / Territory is required.");if(!r.mgr.trim())e.push("Reporting manager is required.");
+  [["rm","Project / Ready Mix order value"],["col","Collection made today"],["old","Old overdue collected"]].forEach(function(p){if(badAmt(r[p[0]]))e.push(p[1]+" must be a valid amount of zero or more.")});
+  var f=0;r.rows.forEach(function(x,i){var any=x.name.trim()||x.addr.trim()||x.phone.trim()||x.sec||x.pri;if(!any)return;
+   if(!x.name.trim())e.push("Row "+(i+1)+": dealer name is missing.");else{f++;if(!x.addr.trim())e.push("Row "+(i+1)+": address is missing.")}
+   if(x.phone.trim()&&!/^[+\d][\d\s-]{6,}$/.test(x.phone.trim()))e.push("Row "+(i+1)+": phone number looks invalid.");
+   if(badAmt(x.sec))e.push("Row "+(i+1)+": secondary sales must be a valid amount of zero or more.");
+   if(badAmt(x.pri))e.push("Row "+(i+1)+": primary sales must be a valid amount of zero or more.")});
  if(!f)e.push("Add at least one dealer visit.");var b=$("errs");
  if(e.length){b.innerHTML="<b>Fix these first:</b><ul>"+e.map(function(x){return "<li>"+esc(x)+"</li>"}).join("")+"</ul>";b.className="errs";b.scrollIntoView({block:"nearest"})}else b.className="errs hide";
  return !e.length}
-function save(){var r=get();if(!check(r))return;var R=ld("reports",{}),D=ld("dealers",{});R[r.date]=r;
+function save(){var r=get();if(!check(r))return;var R=ld("reports",{}),D=ld("dealers",{});
+ if(R[r.date]&&!confirm("A report for "+dmy(r.date)+" already exists. Replace it?"))return;
+ R[r.date]=r;
  r.rows.forEach(function(x){if(x.name.trim())D[x.name.trim().toLowerCase()]={name:x.name.trim(),addr:x.addr,phone:x.phone}});
  sv("reports",R);sv("dealers",D);dl();toast("Report saved")}
 function dl(){var D=ld("dealers",{});$("dl").innerHTML=Object.keys(D).map(function(k){return '<option value="'+esc(D[k].name)+'">'}).join("")}
